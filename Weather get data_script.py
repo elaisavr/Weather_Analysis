@@ -1,3 +1,4 @@
+# 1) import the libraries
 import pandas as pd
 import numpy as np
 import requests
@@ -5,24 +6,24 @@ import datetime
 import sys
 from datetime import date
 
-# 1) create current end date for analysis time range
+# 2) create current end date for analysis time range
 tday = datetime.datetime.now()
 
-# 2) create the months list
+# 3) create the months list
 months = ['Gennaio','Febbraio','Marzo','Aprile','Maggio','Giugno','Luglio','Agosto','Settembre','Ottobre','Novembre','Dicembre']
 
-# 3) create a list of years
+# 4) create a list of years
 time_range = pd.date_range(end=tday, periods = 20, freq='A').strftime('%Y').tolist()
 # print(time_range)
 
-# 4) cast years to string
+# 5) cast years to string
 years =[]
 for i in time_range:
     str(i)
     years.append(i)
 # print(years)
 
-# 5) concatenate the end point with every year and month for the analysis, in order to get the datas
+# 6) concatenate the end point with every year and month for the analysis, in order to get the datas
 endpoint = 'https://www.ilmeteo.it/portale/archivio-meteo/Verona/'
 url_list = []
 for y in years:
@@ -38,7 +39,7 @@ for u in url_list:
     urls.append(ep)
 # print(urls)
 
-# 6) get the datas
+# 7) get the datas
 weather_list = []
 for i in urls:
     url = requests.get(i)
@@ -46,27 +47,27 @@ for i in urls:
     weather_list.append(datas)
 # print(weather_list)
 
-# 7) concat the elements into a single string
+# 8) concat the elements into a single string
 sep= ',' 
 data_string = sep.join(weather_list)
 # print(data_string)
 
-# 8) create the DataFrame by splitting the data_string into rows and columns with list comprehension
+# 9) create the DataFrame by splitting the data_string into rows and columns with list comprehension
 df = pd.DataFrame([col.split(';') for col in data_string.split('\r\n')])
 # print(df)
 
-# 9) switch the columns indexes with the first row containing the headers
+# 10) switch the columns indexes with the first row containing the headers
 df.columns = df.iloc[0].tolist()
 # print(df)
 
-# 10) drop the rows where the headers are repeated
+# 11) drop the rows where the headers are repeated
 df.drop_duplicates(subset='DATA', inplace=True)
 
-# 11) reset the indexes of the records from 0
+# 12) reset the indexes of the records from 0
 df = df[1:].reset_index(drop=True)
 # print(df)
 
-# 12) save the df into a csv file for the Data Cleaning 
+# 13) save the df into a csv file for the Data Cleaning 
 file = df.to_csv('Weather_raw df.csv')
 
 sys.exit()
