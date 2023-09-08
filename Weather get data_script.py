@@ -1,4 +1,4 @@
-# 1) import the libraries
+# 1) import libraries
 import pandas as pd
 import numpy as np
 import requests
@@ -13,7 +13,7 @@ tday = datetime.datetime.now()
 months = ['Gennaio','Febbraio','Marzo','Aprile','Maggio','Giugno','Luglio','Agosto','Settembre','Ottobre','Novembre','Dicembre']
 
 # 4) create a list of years
-time_range = pd.date_range(end=tday, periods = 20, freq='A').strftime('%Y').tolist()
+time_range = pd.date_range(end=tday, periods = 20, freq='YS', inclusive='right').strftime('%Y').tolist()
 # print(time_range)
 
 # 5) cast years to string
@@ -42,8 +42,8 @@ for u in url_list:
 # 7) get the datas
 weather_list = []
 for i in urls:
-    url = requests.get(i)
-    datas = url.text
+    r = requests.get(i)
+    datas = r.text
     weather_list.append(datas)
 # print(weather_list)
 
