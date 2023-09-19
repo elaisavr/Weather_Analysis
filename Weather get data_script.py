@@ -1,3 +1,5 @@
+## I) GETTING DATA - SCRIPT
+
 # 1) import libraries
 import pandas as pd
 import numpy as np
